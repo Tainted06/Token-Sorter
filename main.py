@@ -30,7 +30,7 @@ def main():
         creationdate_unix = int(bin(int(userid))[:-22], 2) + 1420070400000
 
         # Get date
-        year, month = datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%Y"), datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%m").replace("0", "")
+        year, month = datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%Y"), datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%m")
         difference = datetime.datetime.utcnow() - datetime.datetime.fromtimestamp(creationdate_unix / 1000)
         years, months = difference.days // 365, (difference.days % 365) // 30
 
