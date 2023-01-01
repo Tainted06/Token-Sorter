@@ -17,7 +17,10 @@ def main():
     with open("input.txt") as f:
         tokens = f.read().splitlines()
 
+    i = 0
+    previous_percent = 0
     for token in tokens:
+        i+=1
         try:
             # Splitting token to remove email/pass
             full_token = token
@@ -56,6 +59,12 @@ def main():
             with open(f"output/{name}/failed.txt", "a") as f:
                 f.write(full_token + "\n")
             continue
+
+        # Print percent complete every 10% of progress
+        percent = 100 * i / len(tokens)
+        if int(percent) % 10 == 0 and int(percent) != previous_percent:
+            print(f"{int(percent)}% done...")
+            previous_percent = int(percent)
 
     # Finishing
     print(f"Finished sorting {len(tokens)} tokens in {(datetime.datetime.utcnow() - start_time).total_seconds()} seconds!")
