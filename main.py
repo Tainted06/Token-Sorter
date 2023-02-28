@@ -5,10 +5,10 @@ import datetime
 
 
 def main():
-    # Starting
-    print("Starting...")
-    start_time = datetime.datetime.utcnow()
 
+    # Prompt user for sorting by day
+    sort_by_day = input("Do you want to sort by day? (y/n): ").lower() == "y"
+    
     # Output folder
     name = str(datetime.datetime.now()).split(".")[0].replace(":", "-")
     dirs = [
@@ -18,6 +18,8 @@ def main():
         f"output/{name}/sorted_by_relative_time_year",
         f"output/{name}/sorted_by_relative_time_month"
     ]
+    if sort_by_day:
+        dirs.append(f"output/{name}/sorted_by_day")
     for dir in dirs:
         if not os.path.exists(dir):
             os.makedirs(dir)
@@ -26,6 +28,9 @@ def main():
     with open("input.txt") as f:
         tokens = f.read().splitlines()
 
+    # Starting
+    start_time = datetime.datetime.utcnow()
+    print("Starting...")
     i = 0
     previous_percent = 0
     for token in tokens:
@@ -44,6 +49,8 @@ def main():
 
             # Get date
             year, month = datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%Y"), datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%m")
+            if sort_by_day:
+                day = datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%d")
             difference = datetime.datetime.utcnow() - datetime.datetime.fromtimestamp(creationdate_unix / 1000)
             years, months = difference.days // 365, (difference.days % 365) // 30
 
@@ -54,6 +61,9 @@ def main():
                         f.write(full_token + "\n")
                 elif "by_month" in dir:
                     with open(f"{dir}/{year}-{month}.txt", "a") as f:
+                        f.write(full_token + "\n")
+                elif sort_by_day and "by_day" in dir:
+                    with open(f"{dir}/{year}-{month}-{day}.txt", "a") as f:
                         f.write(full_token + "\n")
                 elif "relative_time_year" in dir:
                     with open(f"{dir}/{years} year(s).txt", "a") as f:

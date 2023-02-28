@@ -7,5 +7,3 @@
 - Install python or run on replit
 - Put tokens in input.txt
 - Run main.py
-
-# I'll release an exe version later for windows
