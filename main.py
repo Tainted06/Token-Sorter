@@ -1,5 +1,8 @@
 # Imports
-import os, base64, datetime
+import os
+import base64
+import datetime
+
 
 def main():
     # Starting
@@ -8,7 +11,13 @@ def main():
 
     # Output folder
     name = str(datetime.datetime.now()).split(".")[0].replace(":", "-")
-    dirs = [f"output/{name}", f"output/{name}/sorted_by_month", f"output/{name}/sorted_by_year", f"output/{name}/sorted_by_relative_time_year", f"output/{name}/sorted_by_relative_time_month"]
+    dirs = [
+        f"output/{name}",
+        f"output/{name}/sorted_by_month",
+        f"output/{name}/sorted_by_year",
+        f"output/{name}/sorted_by_relative_time_year",
+        f"output/{name}/sorted_by_relative_time_month"
+    ]
     for dir in dirs:
         if not os.path.exists(dir):
             os.makedirs(dir)
@@ -20,7 +29,7 @@ def main():
     i = 0
     previous_percent = 0
     for token in tokens:
-        i+=1
+        i += 1
         try:
             # Splitting token to remove email/pass
             full_token = token
@@ -50,7 +59,7 @@ def main():
                     with open(f"{dir}/{years} year(s).txt", "a") as f:
                         f.write(full_token + "\n")
                 elif "relative_time_month" in dir:
-                    with open(f"{dir}/{years} year(s) {months%12} month(s).txt", "a") as f:
+                    with open(f"{dir}/{years} year(s) {months % 12} month(s).txt", "a") as f:
                         f.write(full_token + "\n")
 
         # Error
@@ -68,6 +77,7 @@ def main():
 
     # Finishing
     print(f"Finished sorting {len(tokens)} tokens in {(datetime.datetime.utcnow() - start_time).total_seconds()} seconds!")
+
 
 if __name__ == "__main__":
     os.system("cls")
