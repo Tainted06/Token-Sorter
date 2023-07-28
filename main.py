@@ -6,8 +6,16 @@ import datetime
 
 def main():
 
-    # Prompt user for sorting by day
+    # Prompt user for sorting by day and max tokens per file
     sort_by_day = input("Do you want to sort by day? (y/n): ").lower() == "y"
+    if sort_by_day:
+        limit_tokens = input("Do you want to limit each of the day files to 10 tokens? (y/n): ").lower() == "y"
+    else:
+        limit_tokens = False
+
+    # For limit_tokens, create a dict to store each date and the amount 
+    if limit_tokens:
+        day_file_count = {}
     
     # Output folder
     name = str(datetime.datetime.now()).split(".")[0].replace(":", "-")
@@ -51,6 +59,12 @@ def main():
             year, month = datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%Y"), datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%m")
             if sort_by_day:
                 day = datetime.datetime.fromtimestamp(creationdate_unix / 1000).strftime("%d")
+                if limit_tokens:
+                    if day_file_count.get(f"{year}-{month}-{day}") != None:
+                        day_file_count[f"{year}-{month}-{day}"] = day_file_count[f"{year}-{month}-{day}"] + 1
+                    else:
+                        day_file_count[f"{year}-{month}-{day}"] = 0
+                    day = f"{day} #{int(day_file_count[f'{year}-{month}-{day}']/10)}"
             difference = datetime.datetime.utcnow() - datetime.datetime.fromtimestamp(creationdate_unix / 1000)
             years, months = difference.days // 365, (difference.days % 365) // 30
 
